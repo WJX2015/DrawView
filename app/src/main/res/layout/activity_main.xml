@@ -14,6 +14,10 @@
         android:layout_height="match_parent"
         />
 
+    <!--<com.example.lenovo_g50_70.drawview.view.ScrapeView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
     <!--<HorizontalScrollView-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent">-->

@@ -86,5 +86,4 @@ public class MyView extends View {
             canvas.drawPath(mPath, mPaint);
         }
     }
-
 }
