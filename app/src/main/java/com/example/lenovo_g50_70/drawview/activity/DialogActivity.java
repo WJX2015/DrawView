@@ -54,16 +54,28 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
                 EventBus.getDefault().post(eventMsg);
                 break;
             case R.id.tv_size:
+                eventMsg.setType(2);
+                EventBus.getDefault().post(eventMsg);
                 break;
             case R.id.tv_color:
+                eventMsg.setType(3);
+                EventBus.getDefault().post(eventMsg);
                 break;
             case R.id.tv_clear:
+                eventMsg.setType(4);
+                EventBus.getDefault().post(eventMsg);
                 break;
             case R.id.tv_cancel:
+                eventMsg.setType(5);
+                EventBus.getDefault().post(eventMsg);
                 break;
             case R.id.tv_recovery:
+                eventMsg.setType(6);
+                EventBus.getDefault().post(eventMsg);
                 break;
             case R.id.tv_type:
+                eventMsg.setType(7);
+                EventBus.getDefault().post(eventMsg);
                 break;
         }
         finish();
