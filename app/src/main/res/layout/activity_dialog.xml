@@ -32,7 +32,7 @@
                 android:gravity="center"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="  保存路径"
+                android:text="  保存画板"
                 android:textColor="@android:color/black"
                 android:textSize="25sp"/>
 
@@ -71,7 +71,7 @@
                 android:gravity="center"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="  画笔类型"
+                android:text="  画笔样式"
                 android:textColor="@android:color/black"
                 android:textSize="25sp"/>
 

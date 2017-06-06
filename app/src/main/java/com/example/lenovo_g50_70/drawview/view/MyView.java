@@ -7,11 +7,18 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by lenovo-G50-70 on 2017/5/4.
@@ -38,6 +45,8 @@ public class MyView extends View {
         mScreenWidth = mWindowManager.getDefaultDisplay().getWidth();
         mScreenHeight = mWindowManager.getDefaultDisplay().getHeight();
         mPaint = new Paint();
+        //设置抗锯齿
+        mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(Color.GREEN);
         mPaint.setStrokeWidth(10);
@@ -90,10 +99,37 @@ public class MyView extends View {
         }
     }
 
+    /**
+     * 保存画出的路径
+     *
+     * @return 画线的保存位置
+     */
     public void savePath() {
-        MediaStore.Images.Media.insertImage(getContext().getContentResolver(),getChartBitmap(), "title", "description");
-        //把图片存放在自己喜欢的位置，并且能在图库中找到图片
-        //MediaStore.Images.Media.insertImage(getContext().getContentResolver(),path, "title", "description");
+        //格式化时间的对象
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        //获取当前时间
+        Date curDate = new Date(System.currentTimeMillis());
+        //格式化当前时间,并作为文件名保存到手机
+        String curTimeFile = formatter.format(curDate) + ".png";
+        //创建文件路径
+        File extBaseDir = Environment.getExternalStorageDirectory();
+        //创建文件，保存画线
+        File file = new File(extBaseDir.getAbsolutePath(), curTimeFile);
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+            //压缩图片的方法，100表示不压缩，0表示压缩100%
+            mBufferBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.close();
+            MediaStore.Images.Media.insertImage(getContext().getContentResolver(), mBufferBitmap, "title", "description");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void saveBitmap() {
+        MediaStore.Images.Media.insertImage(getContext().getContentResolver(), getChartBitmap(), "title", "description");
     }
 
     /**
@@ -106,8 +142,18 @@ public class MyView extends View {
     }
 
     /**
+     * 设置画笔颜色
+     *
+     * @param color
+     */
+    public void setPaintColor(int color) {
+        mPaint.setColor(color);
+    }
+
+    /**
      * 自定义View转换Bitmap
      * 原理:画出画布的背景
+     *
      * @return
      */
     public Bitmap getChartBitmap() {
