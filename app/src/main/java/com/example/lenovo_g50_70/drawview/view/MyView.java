@@ -14,11 +14,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.example.lenovo_g50_70.drawview.bean.Drawpath;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by lenovo-G50-70 on 2017/5/4.
@@ -35,15 +40,20 @@ public class MyView extends View {
     private int mScreenWidth;            //屏幕宽度
     private int mScreenHeight;           //屏幕高度
 
+    private List<Drawpath> mSavepaths;  //保存的路径
+    private List<Drawpath> mDelpaths;   //删除的路径
+    private Drawpath mDrawpath;
+
     public MyView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView();
+        initCanvas();
     }
 
-    private void initView() {
-        mWindowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        mScreenWidth = mWindowManager.getDefaultDisplay().getWidth();
-        mScreenHeight = mWindowManager.getDefaultDisplay().getHeight();
+    /**
+     * 初始化画板相关
+     */
+    private void initCanvas() {
         mPaint = new Paint();
         //设置抗锯齿
         mPaint.setAntiAlias(true);
@@ -61,11 +71,27 @@ public class MyView extends View {
         mBufferCanvas.drawColor(Color.WHITE);
     }
 
+    /**
+     * 初始化内容
+     */
+    private void initView() {
+        mWindowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        mScreenWidth = mWindowManager.getDefaultDisplay().getWidth();
+        mScreenHeight = mWindowManager.getDefaultDisplay().getHeight();
+
+        mSavepaths=new ArrayList<>();
+        mDelpaths=new ArrayList<>();
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mPath.reset();
+                //每次都创建新的保存  mPath.reset无法满足撤销
+                mPath=new Path();//填坑
+                mDrawpath=new Drawpath();
+                mDrawpath.setPaint(mPaint);
+                mDrawpath.setPath(mPath);
                 float dx = event.getX();
                 float dy = event.getY();
                 mPath.moveTo(dx, dy);
@@ -82,6 +108,7 @@ public class MyView extends View {
                 float uy = event.getY();
                 mPath.lineTo(ux, uy);
                 mBufferCanvas.drawPath(mPath, mPaint);
+                mSavepaths.add(mDrawpath);
                 invalidate();
                 break;
         }
@@ -173,6 +200,34 @@ public class MyView extends View {
                 //橡皮擦
                 mPaint.setColor(Color.WHITE);
                 break;
+        }
+    }
+
+    /**
+     * 撤销的核心思想就是将画布清空
+     * 将保存下来的Path路径最后一个移除掉
+     * 重新将路径画在画布上面。
+     */
+    public void revoke(){
+        //撤销的前提是画板上最少有一条线
+        if(mSavepaths!=null && mSavepaths.size()>0){
+            //重新初始化以清空画布
+            initCanvas();
+            //获取mSavepaths的最后一个元素
+            Drawpath path =mSavepaths.get(mSavepaths.size()-1);
+            //添加到删除列
+            mDelpaths.add(path);
+            //从保存列删除
+            mSavepaths.remove(mSavepaths.size()-1);
+            //重复保存
+            Iterator<Drawpath> iter =mSavepaths.iterator();
+            //讲保存列中的路径重绘到画布
+            while(iter.hasNext()){
+                Drawpath dp=iter.next();
+                mBufferCanvas.drawPath(dp.getPath(),dp.getPaint());
+            }
+            //调用onDraw方法
+            invalidate();
         }
     }
 

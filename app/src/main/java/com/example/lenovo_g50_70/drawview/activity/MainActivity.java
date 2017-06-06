@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             //撤销路径
             case 5:
-
+                mMyView.revoke();
                 break;
             //恢复路径
             case 6:
