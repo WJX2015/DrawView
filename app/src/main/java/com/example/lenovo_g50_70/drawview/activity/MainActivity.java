@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import com.example.lenovo_g50_70.drawview.R;
 import com.example.lenovo_g50_70.drawview.bean.EventMsg;
@@ -111,10 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 mMyView.clear();
                 break;
         }
-
-        String msg = "onEventMainThread收到了消息：" + eventMsg.getType();
-
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     /**

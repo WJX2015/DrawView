@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.example.lenovo_g50_70.drawview.bean.Drawpath;
 
@@ -161,6 +162,7 @@ public class MyView extends View {
      */
     public void saveBitmap() {
         MediaStore.Images.Media.insertImage(getContext().getContentResolver(), getChartBitmap(), "title", "description");
+        Toast.makeText(getContext(), "图片保存", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -170,6 +172,7 @@ public class MyView extends View {
      */
     public void setPaintSize(int size) {
         mPaint.setStrokeWidth(size);
+        Toast.makeText(getContext(), "画笔大小调节", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -179,6 +182,7 @@ public class MyView extends View {
      */
     public void setPaintColor(int color) {
         mPaint.setColor(color);
+        Toast.makeText(getContext(), "画笔颜色调节", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -201,6 +205,7 @@ public class MyView extends View {
                 mPaint.setColor(Color.WHITE);
                 break;
         }
+        Toast.makeText(getContext(), "画笔样式设置", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -228,6 +233,7 @@ public class MyView extends View {
             }
             //调用onDraw方法
             invalidate();
+            Toast.makeText(getContext(), "撤销路径", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -246,6 +252,7 @@ public class MyView extends View {
             mDelpaths.remove(mDelpaths.size() - 1);
             //重绘视图
             invalidate();
+            Toast.makeText(getContext(), "恢复路径", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -258,6 +265,7 @@ public class MyView extends View {
         mDelpaths.clear();
         //视图重绘
         invalidate();
+        Toast.makeText(getContext(), "清空画布", Toast.LENGTH_SHORT).show();
     }
 
     /**
