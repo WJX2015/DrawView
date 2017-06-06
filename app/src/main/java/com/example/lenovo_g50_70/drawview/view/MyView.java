@@ -79,8 +79,8 @@ public class MyView extends View {
         mScreenWidth = mWindowManager.getDefaultDisplay().getWidth();
         mScreenHeight = mWindowManager.getDefaultDisplay().getHeight();
 
-        mSavepaths=new ArrayList<>();
-        mDelpaths=new ArrayList<>();
+        mSavepaths = new ArrayList<>();
+        mDelpaths = new ArrayList<>();
     }
 
     @Override
@@ -88,8 +88,8 @@ public class MyView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 //每次都创建新的保存  mPath.reset无法满足撤销
-                mPath=new Path();//填坑
-                mDrawpath=new Drawpath();
+                mPath = new Path();//填坑
+                mDrawpath = new Drawpath();
                 mDrawpath.setPaint(mPaint);
                 mDrawpath.setPath(mPath);
                 float dx = event.getX();
@@ -208,25 +208,43 @@ public class MyView extends View {
      * 将保存下来的Path路径最后一个移除掉
      * 重新将路径画在画布上面。
      */
-    public void revoke(){
+    public void revoke() {
         //撤销的前提是画板上最少有一条线
-        if(mSavepaths!=null && mSavepaths.size()>0){
+        if (mSavepaths != null && mSavepaths.size() > 0) {
             //重新初始化以清空画布
             initCanvas();
             //获取mSavepaths的最后一个元素
-            Drawpath path =mSavepaths.get(mSavepaths.size()-1);
+            Drawpath path = mSavepaths.get(mSavepaths.size() - 1);
             //添加到删除列
             mDelpaths.add(path);
             //从保存列删除
-            mSavepaths.remove(mSavepaths.size()-1);
+            mSavepaths.remove(mSavepaths.size() - 1);
             //重复保存
-            Iterator<Drawpath> iter =mSavepaths.iterator();
+            Iterator<Drawpath> iter = mSavepaths.iterator();
             //讲保存列中的路径重绘到画布
-            while(iter.hasNext()){
-                Drawpath dp=iter.next();
-                mBufferCanvas.drawPath(dp.getPath(),dp.getPaint());
+            while (iter.hasNext()) {
+                Drawpath dp = iter.next();
+                mBufferCanvas.drawPath(dp.getPath(), dp.getPaint());
             }
             //调用onDraw方法
+            invalidate();
+        }
+    }
+
+    /**
+     * 恢复路径,撤销的相反
+     */
+    public void recover() {
+        //判断是否有撤销的路径
+        if (mDelpaths.size() > 0) {
+            //获取最后撤销的路径
+            Drawpath dp = mDelpaths.get(mDelpaths.size() - 1);
+            //重新保存
+            mSavepaths.add(dp);
+            mBufferCanvas.drawPath(dp.getPath(), dp.getPaint());
+            //从删除列移除
+            mDelpaths.remove(mDelpaths.size() - 1);
+            //重绘视图
             invalidate();
         }
     }

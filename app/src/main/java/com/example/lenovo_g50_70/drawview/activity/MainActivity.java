@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             //恢复路径
             case 6:
-
+                mMyView.recover();
                 break;
             //清空画布
             case 7:
