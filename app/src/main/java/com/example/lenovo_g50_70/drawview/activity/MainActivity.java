@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -28,10 +29,10 @@ import de.greenrobot.event.Subscribe;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MyView mMyView; //自定义画板
+    private MyView mMyView;             //自定义画板
     private FloatingActionButton fab;   //浮动按钮
-    private Intent mIntent; //功能模块Activity
-    private LayoutInflater mInflater;//动态加载布局
+    private Intent mIntent;             //功能模块Activity
+    private LayoutInflater mInflater;   //动态加载布局
 
     private WindowManager mWindowManager;//屏幕管理器
     private int mScreenWidth;            //屏幕宽度
@@ -39,8 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
     private View mView;         //画笔大小视图
     private SeekBar mSeekBar;   //进度条
-    private int size = 5;         //画笔初始化大小
-    
+    private int size = 5;       //画笔初始化大小
+
+    private RadioGroup mGroup;            //画笔样式选择
+    private int mStyle=1;                 //画笔默认样式
+    private int mId=R.id.radio_stroke;    //记录选中ID
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             //画笔类型
             case 4:
-
+                dialogStyle();
                 break;
             //撤销路径
             case 5:
@@ -141,6 +146,49 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .build()
                 .show();
+    }
+
+    /**
+     * 画笔样式调节
+     */
+    private void dialogStyle() {
+        View view = mInflater.inflate(R.layout.dialog_style, null);
+        mGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
+        mGroup.check(mId);
+        mGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                switch (checkedId){
+                    case R.id.radio_stroke:
+                        mStyle =1;
+                        mId=R.id.radio_stroke;
+                        break;
+                    case R.id.radio_fill:
+                        mStyle =2;
+                        mId=R.id.radio_fill;
+                        break;
+                    case R.id.radio_eraser:
+                        mStyle =3;
+                        mId=R.id.radio_eraser;
+                        break;
+                }
+            }
+        });
+
+        //对话框的显示
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        builder.setTitle("画笔样式调节器");
+        builder.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mMyView.setPaintStyle(mStyle);
+                    }
+                });
+
+        builder.show().getWindow().setLayout((int) (mScreenWidth * 0.8), (int) (mScreenHeight * 0.5));
     }
 
     /**
@@ -202,5 +250,4 @@ public class MainActivity extends AppCompatActivity {
 
         builder.show().getWindow().setLayout((int) (mScreenWidth * 0.8), (int) (mScreenHeight * 0.5));
     }
-
 }

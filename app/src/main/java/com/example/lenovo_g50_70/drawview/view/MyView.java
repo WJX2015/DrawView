@@ -57,6 +57,8 @@ public class MyView extends View {
         mBufferCanvas = new Canvas();
         //将缓冲位图设置给缓冲画布
         mBufferCanvas.setBitmap(mBufferBitmap);
+        //铺垫橡皮擦的效果
+        mBufferCanvas.drawColor(Color.WHITE);
     }
 
     @Override
@@ -127,7 +129,9 @@ public class MyView extends View {
         }
     }
 
-
+    /**
+     * 画板保存到图库
+     */
     public void saveBitmap() {
         MediaStore.Images.Media.insertImage(getContext().getContentResolver(), getChartBitmap(), "title", "description");
     }
@@ -148,6 +152,28 @@ public class MyView extends View {
      */
     public void setPaintColor(int color) {
         mPaint.setColor(color);
+    }
+
+    /**
+     * 设置画笔样式
+     *
+     * @param style
+     */
+    public void setPaintStyle(int style) {
+        switch (style) {
+            case 1:
+                //描边
+                mPaint.setStyle(Paint.Style.STROKE);
+                break;
+            case 2:
+                //填充并描边
+                mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+                break;
+            case 3:
+                //橡皮擦
+                mPaint.setColor(Color.WHITE);
+                break;
+        }
     }
 
     /**

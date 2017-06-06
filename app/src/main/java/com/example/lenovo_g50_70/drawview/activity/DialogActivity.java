@@ -61,7 +61,7 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
                 eventMsg.setType(3);
                 EventBus.getDefault().post(eventMsg);
                 break;
-            case R.id.tv_clear:
+            case R.id.tv_type:
                 eventMsg.setType(4);
                 EventBus.getDefault().post(eventMsg);
                 break;
@@ -73,7 +73,7 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
                 eventMsg.setType(6);
                 EventBus.getDefault().post(eventMsg);
                 break;
-            case R.id.tv_type:
+            case R.id.tv_clear:
                 eventMsg.setType(7);
                 EventBus.getDefault().post(eventMsg);
                 break;
