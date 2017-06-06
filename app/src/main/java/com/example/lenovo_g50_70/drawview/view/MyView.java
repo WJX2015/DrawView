@@ -250,6 +250,17 @@ public class MyView extends View {
     }
 
     /**
+     * 清空画布
+     */
+    public void clear() {
+        initCanvas();
+        mSavepaths.clear();
+        mDelpaths.clear();
+        //视图重绘
+        invalidate();
+    }
+
+    /**
      * 自定义View转换Bitmap
      * 原理:画出画布的背景
      *

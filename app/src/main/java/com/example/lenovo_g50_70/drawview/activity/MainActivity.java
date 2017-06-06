@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             //清空画布
             case 7:
-
+                mMyView.clear();
                 break;
         }
 
