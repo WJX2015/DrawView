@@ -217,7 +217,11 @@ public class MyView extends View {
         //撤销的前提是画板上最少有一条线
         if (mSavepaths != null && mSavepaths.size() > 0) {
             //重新初始化以清空画布
-            initCanvas();
+            mPath = new Path();
+            mBufferBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.ARGB_8888);
+            mBufferCanvas = new Canvas();
+            mBufferCanvas.setBitmap(mBufferBitmap);
+            mBufferCanvas.drawColor(Color.WHITE);
             //获取mSavepaths的最后一个元素
             Drawpath path = mSavepaths.get(mSavepaths.size() - 1);
             //添加到删除列
@@ -260,7 +264,11 @@ public class MyView extends View {
      * 清空画布
      */
     public void clear() {
-        initCanvas();
+        mPath = new Path();
+        mBufferBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.ARGB_8888);
+        mBufferCanvas = new Canvas();
+        mBufferCanvas.setBitmap(mBufferBitmap);
+        mBufferCanvas.drawColor(Color.WHITE);
         mSavepaths.clear();
         mDelpaths.clear();
         //视图重绘
