@@ -90,8 +90,15 @@ public class MyView extends View {
             case MotionEvent.ACTION_DOWN:
                 //每次都创建新的保存  mPath.reset无法满足撤销
                 mPath = new Path();//填坑
+                //每次都新建一支画笔，解决撤销路径重画出现的问题
+                Paint paint = new Paint();//填坑
+                paint.setColor(mPaint.getColor());
+                paint.setStrokeWidth(mPaint.getStrokeWidth());
+                paint.setStyle(mPaint.getStyle());
+                paint.setDither(true);
+                paint.setAntiAlias(true);
                 mDrawpath = new Drawpath();
-                mDrawpath.setPaint(mPaint);
+                mDrawpath.setPaint(paint);
                 mDrawpath.setPath(mPath);
                 float dx = event.getX();
                 float dy = event.getY();
